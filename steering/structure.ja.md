@@ -1,8 +1,9 @@
 # Project Structure
 
 **Project**: MS-GraphRAG+LazyGraphRAG
-**Last Updated**: 2025-12-23
-**Version**: 1.1
+**Last Updated**: 2025-12-24
+**Version**: 2.0
+**Status**: ✅ 実装完了
 
 ---
 
@@ -25,7 +26,7 @@
 │                        Query Engine                             │
 │              (graphrag/query/structured_search/)                │
 │   ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐         │
-│   │  Local   │ │  Global  │ │  DRIFT   │ │  Lazy    │ ← NEW   │
+│   │  Local   │ │  Global  │ │  DRIFT   │ │  Lazy    │ ✅ DONE │
 │   │  Search  │ │  Search  │ │  Search  │ │  Search  │         │
 │   └──────────┘ └──────────┘ └──────────┘ └──────────┘         │
 ├─────────────────────────────────────────────────────────────────┤

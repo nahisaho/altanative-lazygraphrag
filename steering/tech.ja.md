@@ -1,8 +1,8 @@
 # Technology Stack
 
 **Project**: MS-GraphRAG+LazyGraphRAG
-**Last Updated**: 2025-12-23
-**Status**: 確定済み（既存GraphRAGコードベースに準拠）
+**Last Updated**: 2025-12-24
+**Status**: ✅ 実装完了（既存GraphRAGコードベースに準拠）
 
 ---
 
@@ -50,12 +50,27 @@
 
 ## Existing Query Implementations (Reference)
 
-| Search Type | Location | Pattern |
-|-------------|----------|----------|
-| Local Search | `graphrag/query/structured_search/local_search/` | Entity-focused |
-| Global Search | `graphrag/query/structured_search/global_search/` | Map-Reduce |
-| DRIFT Search | `graphrag/query/structured_search/drift_search/` | Iterative refinement |
-| **Lazy Search** | `graphrag/query/structured_search/lazy_search/` | **NEW: To be implemented** |
+| Search Type | Location | Pattern | Status |
+|-------------|----------|----------|--------|
+| Local Search | `graphrag/query/structured_search/local_search/` | Entity-focused | ✅ 既存 |
+| Global Search | `graphrag/query/structured_search/global_search/` | Map-Reduce | ✅ 既存 |
+| DRIFT Search | `graphrag/query/structured_search/drift_search/` | Iterative refinement | ✅ 既存 |
+| **Lazy Search** | `graphrag/query/structured_search/lazy_search/` | **Budget-aware lazy evaluation** | ✅ **実装完了** |
+
+---
+
+## LazySearch Implementation Details
+
+| コンポーネント | ファイル | 説明 |
+|--------------|---------|------|
+| LazySearch | `search.py` | メインオーケストレータ |
+| LazySearchState | `state.py` | 状態管理 (予算、クレーム、関連文) |
+| LazySearchConfig | `lazy_search_config.py` | プリセット設定 (z100/z500/z1500) |
+| QueryExpander | `query_expander.py` | クエリ展開 |
+| RelevanceTester | `relevance_tester.py` | 関連性テスト (0-10スコア) |
+| ClaimExtractor | `claim_extractor.py` | クレーム抽出 |
+| IterativeDeepener | `iterative_deepener.py` | 反復深化探索 |
+| LazyContextBuilder | `context.py` | コンテキスト構築 |
 
 ---
 
@@ -88,18 +103,19 @@ pydantic = ">=2.0"
 
 ## Architecture Decisions
 
-### ADR-001: BaseSearch継承
+### ADR-001: BaseSearch継承 ✅
 **Decision**: LazySearchはBaseSearchを継承し、既存のQueryインターフェースと互換性を維持
 **Rationale**: 既存のコールバック、結果フォーマット、APIとの一貫性
+**Status**: 実装完了
 
-### ADR-002: 状態管理クラス
+### ADR-002: 状態管理クラス ✅
 **Decision**: LazySearchStateで探索状態を一元管理
 **Rationale**: DRIFT Searchの QueryState パターンに準拠
+**Status**: 実装完了
 
-### ADR-003: バッチLLM呼び出し
+### ADR-003: バッチLLM呼び出し ✅
 **Decision**: 関連性テストはバッチ処理でLLM呼び出し
 **Rationale**: API呼び出し回数削減によるコスト・レイテンシ最適化
-
----
+**Status**: 実装完了
 
 *既存GraphRAGコードベースとの一貫性を最優先としています。*
