@@ -355,7 +355,7 @@ LazyGraphRAG をオープンソース版 MS-GraphRAG に独自実装し、大規
 
 ### Microsoft Discovery への期待
 
-Microsoft は 2025年6月に LazyGraphRAG を **[Microsoft Discovery](https://azure.microsoft.com/en-us/blog/transforming-rd-with-agentic-ai-introducing-microsoft-discovery/)** に統合すると発表しています。今回の独自実装で得られた知見から、公式実装への期待が高まります：
+Microsoft は 2025年6月に LazyGraphRAG を **[Microsoft Discovery](https://azure.microsoft.com/en-us/blog/transforming-rd-with-agentic-ai-introducing-microsoft-discovery/)** に統合すると発表しています。今回の独自実装で得られた知見から、公式実装への期待が高まります。
 
 🚀 **さらなる最適化**: Microsoft のエンジニアリングによる本番環境向け最適化
 🔗 **Azure 統合**: Azure AI Services とのシームレスな連携
@@ -376,7 +376,7 @@ Microsoft は 2025年6月に LazyGraphRAG を **[Microsoft Discovery](https://az
 - [LazyGraphRAG 論文・ブログ](https://www.microsoft.com/en-us/research/blog/lazygraphrag-setting-a-new-standard-for-quality-and-cost/)
 - [MS-GraphRAG GitHub（オープンソース版）](https://github.com/microsoft/graphrag)
 - [Microsoft Discovery 発表ブログ](https://azure.microsoft.com/en-us/blog/transforming-rd-with-agentic-ai-introducing-microsoft-discovery/)
-- [本実装のリポジトリ](https://github.com/nahisaho/MS-GraphRAG-LazyGraphRAG)
+- [本実装のリポジトリ](https://github.com/nahisaho/altanative-lazygraphrag)
 
 ---
 
