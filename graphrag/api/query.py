@@ -1224,3 +1224,113 @@ async def multi_index_basic_search(
         query=query,
         callbacks=callbacks,
     )
+
+
+@validate_call(config={"arbitrary_types_allowed": True})
+async def lazy_search(
+    config: GraphRagConfig,
+    text_units: pd.DataFrame,
+    query: str,
+    preset: str = "z500",
+    callbacks: list[QueryCallbacks] | None = None,
+    verbose: bool = False,
+) -> tuple[
+    str | dict[str, Any] | list[dict[str, Any]],
+    str | list[pd.DataFrame] | dict[str, pd.DataFrame],
+]:
+    """Perform a LazyGraphRAG search and return the context data and response.
+
+    LazyGraphRAG is a cost-efficient alternative to full GraphRAG that achieves
+    comparable quality at approximately 1/100th of the cost using iterative
+    deepening search with budget-controlled LLM calls.
+
+    Parameters
+    ----------
+    - config (GraphRagConfig): A graphrag configuration (from settings.yaml)
+    - text_units (pd.DataFrame): A DataFrame containing the final text units (from text_units.parquet)
+    - query (str): The user query to search for.
+    - preset (str): The search preset to use (z100, z500, z1500). Default: z500.
+    - callbacks (list[QueryCallbacks]): Optional callbacks for search events.
+    - verbose (bool): Whether to enable verbose logging.
+
+    Returns
+    -------
+    tuple: A tuple containing the response string and context data dictionary.
+    """
+    from graphrag.config.models.lazy_search_config import LazySearchConfig
+    from graphrag.query.structured_search.lazy_search import LazySearch, LazySearchData
+
+    init_loggers(config=config, verbose=verbose, filename="query.log")
+
+    callbacks = callbacks or []
+    context_data: dict[str, Any] = {}
+
+    def on_context(context: Any) -> None:
+        nonlocal context_data
+        context_data = context
+
+    local_callbacks = NoopQueryCallbacks()
+    local_callbacks.on_context = on_context
+    callbacks.append(local_callbacks)
+
+    # Get lazy search configuration from preset or config
+    if preset:
+        lazy_config = LazySearchConfig.from_preset(preset)
+    else:
+        lazy_config = config.lazy_search
+
+    # Prepare text chunks for LazySearch
+    text_chunks = text_units[["id", "text"]].copy()
+    if "community_id" in text_units.columns:
+        text_chunks["community_id"] = text_units["community_id"]
+    else:
+        text_chunks["community_id"] = "default"
+
+    # Create search data
+    search_data = LazySearchData(text_chunks=text_chunks)
+
+    # Get chat model from config
+    from graphrag.config.enums import ModelType
+    from graphrag.language_model.manager import ModelManager
+
+    # Determine which model to use
+    model_id = lazy_config.chat_model_id
+    if model_id == "default" and config.models:
+        model_id = list(config.models.keys())[0]
+    
+    chat_model_config = config.get_language_model_config(model_id)
+    model_manager = ModelManager()
+    chat_model = model_manager.get_or_create_chat_model(
+        name="lazy_search",
+        model_type=ModelType.Chat,
+        config=chat_model_config,
+    )
+
+    # Create LazySearch instance
+    search_engine = LazySearch(
+        model=chat_model,
+        config=lazy_config,
+        data=search_data,
+    )
+
+    logger.debug("Executing lazy search query: %s", query)
+    result = await search_engine.search(query=query)
+
+    # Build context data from result
+    context_data = result.context_data or {}
+    context_data["metrics"] = {
+        "completion_time": result.completion_time,
+        "iterations_used": result.iterations_used,
+        "chunks_processed": result.chunks_processed,
+        "budget_used": result.budget_used,
+        "claims_extracted": result.claims_extracted,
+        "relevant_sentences": result.relevant_sentences,
+    }
+
+    # Notify callbacks
+    for callback in callbacks:
+        if hasattr(callback, "on_context"):
+            callback.on_context(context_data)
+
+    logger.debug("Query response: %s", truncate(result.response, 400))
+    return result.response, context_data

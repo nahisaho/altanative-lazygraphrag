@@ -20,6 +20,7 @@ from graphrag.config.models.cluster_graph_config import ClusterGraphConfig
 from graphrag.config.models.community_reports_config import CommunityReportsConfig
 from graphrag.config.models.drift_search_config import DRIFTSearchConfig
 from graphrag.config.models.embed_graph_config import EmbedGraphConfig
+from graphrag.config.models.lazy_search_config import LazySearchConfig
 from graphrag.config.models.extract_claims_config import ClaimExtractionConfig
 from graphrag.config.models.extract_graph_config import ExtractGraphConfig
 from graphrag.config.models.extract_graph_nlp_config import ExtractGraphNLPConfig
@@ -337,6 +338,11 @@ class GraphRagConfig(BaseModel):
         description="The basic search configuration.", default=BasicSearchConfig()
     )
     """The basic search configuration."""
+
+    lazy_search: LazySearchConfig = Field(
+        description="The lazy search configuration.", default=LazySearchConfig()
+    )
+    """The lazy search configuration."""
 
     def _validate_vector_store_db_uri(self) -> None:
         """Validate the vector store configuration."""

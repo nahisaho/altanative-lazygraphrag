@@ -488,12 +488,19 @@ def _query_cli(
         "--streaming/--no-streaming",
         help="Print the response in a streaming manner.",
     ),
+    preset: str = typer.Option(
+        "z500",
+        "--preset",
+        "-p",
+        help="LazyGraphRAG search preset (z100, z500, z1500). Only used with --method lazy.",
+    ),
 ) -> None:
     """Query a knowledge graph index."""
     from graphrag.cli.query import (
         run_basic_search,
         run_drift_search,
         run_global_search,
+        run_lazy_search,
         run_local_search,
     )
 
@@ -538,6 +545,15 @@ def _query_cli(
                 data_dir=data,
                 root_dir=root,
                 streaming=streaming,
+                query=query,
+                verbose=verbose,
+            )
+        case SearchMethod.LAZY:
+            run_lazy_search(
+                config_filepath=config,
+                data_dir=data,
+                root_dir=root,
+                preset=preset,
                 query=query,
                 verbose=verbose,
             )

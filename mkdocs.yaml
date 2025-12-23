@@ -42,12 +42,14 @@ nav:
       - Global Search: "query/global_search.md"
       - Local Search: "query/local_search.md"
       - DRIFT Search: "query/drift_search.md"
+      - LazyGraphRAG Search: "query/lazy_search.md"
       - Question Generation: "query/question_generation.md"
       - Notebooks:
           - Overview: "query/notebooks/overview.md"
           - Global Search: "examples_notebooks/global_search.ipynb"
           - Local Search: "examples_notebooks/local_search.ipynb"
           - DRIFT Search: "examples_notebooks/drift_search.ipynb"
+          - LazyGraphRAG Search: "examples_notebooks/lazy_search.ipynb"
   - Configuration:
       - Overview: "config/overview.md"
       - Init Command: "config/init.md"

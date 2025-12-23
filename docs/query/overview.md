@@ -6,6 +6,7 @@ It is responsible for the following tasks:
 - [Local Search](#local-search)
 - [Global Search](#global-search)
 - [DRIFT Search](#drift-search)
+- [LazyGraphRAG Search](#lazygraphrag-search)
 - [Question Generation](#question-generation)
 
 ## Local Search
@@ -25,6 +26,17 @@ More about this can be checked at the [Global Search](global_search.md) document
 DRIFT Search introduces a new approach to local search queries by including community information in the search process. This greatly expands the breadth of the query’s starting point and leads to retrieval and usage of a far higher variety of facts in the final answer. This addition expands the GraphRAG query engine by providing a more comprehensive option for local search, which uses community insights to refine a query into detailed follow-up questions.
 
 To learn more about DRIFT Search, please refer to the [DRIFT Search](drift_search.md) documentation.
+
+## LazyGraphRAG Search
+
+LazyGraphRAG is a cost-efficient query algorithm that achieves comparable quality to full GraphRAG at approximately **1/100th of the cost**. It uses an iterative deepening search strategy with budget-controlled LLM calls. LazyGraphRAG is ideal for general-purpose queries where cost efficiency is important.
+
+Key features:
+- **Budget-controlled LLM calls**: Z100/Z500/Z1500 presets for cost management
+- **Iterative deepening search**: Progressive exploration focused on relevant content
+- **Query expansion**: Subquery decomposition for comprehensive coverage
+
+For more information, see the [LazyGraphRAG Search](lazy_search.md) documentation.
 
 ## Basic Search
 

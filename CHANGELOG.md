@@ -1,6 +1,21 @@
 # Changelog
 Note: version releases in the 0.x.y range may introduce breaking changes.
 
+## Unreleased
+
+### Added
+- **LazyGraphRAG Search**: A cost-efficient alternative to full GraphRAG achieving comparable quality at ~1/100th cost.
+  - New search method: `--method lazy` with budget presets (z100, z500, z1500)
+  - Iterative deepening search with budget-controlled LLM calls
+  - Query expansion for comprehensive coverage
+  - Relevance testing with configurable thresholds
+  - Claim extraction from relevant content
+  - New API function: `graphrag.api.lazy_search()`
+  - New CLI option: `--preset` for LazyGraphRAG budget selection
+  - Configuration: `LazySearchConfig` with `from_preset()` factory method
+  - Documentation: `docs/query/lazy_search.md`
+  - Sample notebook: `docs/examples_notebooks/lazy_search.ipynb`
+
 ## 2.7.0
 
 - minor: Set LiteLLM as default in init_content.

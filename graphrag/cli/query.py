@@ -474,6 +474,66 @@ def run_basic_search(
     return response, context_data
 
 
+def run_lazy_search(
+    config_filepath: Path | None,
+    data_dir: Path | None,
+    root_dir: Path,
+    preset: str,
+    query: str,
+    verbose: bool,
+):
+    """Perform a LazyGraphRAG search with a given query.
+
+    LazyGraphRAG is a cost-efficient alternative to full GraphRAG that achieves
+    comparable quality at approximately 1/100th of the cost.
+
+    Loads index files required for lazy search and calls the Query API.
+    """
+    root = root_dir.resolve()
+    cli_overrides = {}
+    if data_dir:
+        cli_overrides["output.base_dir"] = str(data_dir)
+    config = load_config(root, config_filepath, cli_overrides)
+
+    dataframe_dict = _resolve_output_files(
+        config=config,
+        output_list=[
+            "text_units",
+        ],
+    )
+
+    # Multi-index not yet supported for lazy search
+    if dataframe_dict["multi-index"]:
+        msg = "Multi-index lazy search is not yet supported"
+        raise NotImplementedError(msg)
+
+    final_text_units: pd.DataFrame = dataframe_dict["text_units"]
+
+    response, context_data = asyncio.run(
+        api.lazy_search(
+            config=config,
+            text_units=final_text_units,
+            query=query,
+            preset=preset,
+            verbose=verbose,
+        )
+    )
+    print(response)
+
+    # Print metrics if verbose
+    if verbose and "metrics" in context_data:
+        metrics = context_data["metrics"]
+        print("\n--- LazySearch Metrics ---")
+        print(f"Completion time: {metrics.get('completion_time', 'N/A'):.2f}s")
+        print(f"Iterations used: {metrics.get('iterations_used', 'N/A')}")
+        print(f"Chunks processed: {metrics.get('chunks_processed', 'N/A')}")
+        print(f"Budget used: {metrics.get('budget_used', 'N/A')}")
+        print(f"Claims extracted: {metrics.get('claims_extracted', 'N/A')}")
+        print(f"Relevant sentences: {metrics.get('relevant_sentences', 'N/A')}")
+
+    return response, context_data
+
+
 def _resolve_output_files(
     config: GraphRagConfig,
     output_list: list[str],

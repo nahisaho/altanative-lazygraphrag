@@ -1,0 +1,31 @@
+# MUSUBI Project Configuration
+name: MS-GraphRAG+LazyGraphRAG
+description: LazyGraphRAGクエリアルゴリズムの完全実装プロジェクト
+locale: ja
+version: "0.2.0"
+created: 2025-12-22
+updated: 2025-12-23
+
+# Technology Stack
+tech_stack:
+  approach: existing-codebase-extension
+  languages:
+    - python  # 3.10+
+  frameworks:
+    - graphrag  # Microsoft GraphRAG
+  key_libraries:
+    - pandas
+    - networkx
+    - tiktoken
+    - textblob
+    - pydantic
+
+# Current Phase
+phase: requirements-complete
+features:
+  - id: lazy-search
+    name: LazyGraphRAG Query Algorithms
+    status: requirements-defined
+    specs:
+      - storage/specs/REQ-LAZY-001-query-algorithms.md
+      - storage/specs/SPEC-LAZY-001-query-algorithms.md
