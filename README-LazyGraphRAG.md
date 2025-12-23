@@ -187,6 +187,7 @@ graphrag/config/models/
 - [LazyGraphRAG Blog Post (Microsoft Research)](https://www.microsoft.com/en-us/research/blog/lazygraphrag-setting-a-new-standard-for-quality-and-cost/)
 - [MS-GraphRAG GitHub (Original)](https://github.com/microsoft/graphrag)
 - [Microsoft Discovery Announcement](https://azure.microsoft.com/en-us/blog/transforming-rd-with-agentic-ai-introducing-microsoft-discovery/)
+- [Qiita: 実装解説記事（日本語）](https://qiita.com/hisaho/items/bfe37d70c291380f8d67)
 
 ## ⚠️ Disclaimer
 
